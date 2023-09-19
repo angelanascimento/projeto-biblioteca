@@ -10,22 +10,31 @@ public class Menu {
 	
 	public static void main(String[] args) {
 		
-		int option;
+		int option = -3;
 		Scanner input = new Scanner(System.in);
 		List<Book> listBooks = new ArrayList<>();
 		List<Student> listStudent = new ArrayList<>();
 		List<Teacher> listTeacher = new ArrayList<>();
 		List<Student> pendenciesStudents = new ArrayList<>();
 		List<Teacher> pendenciesTeachers = new ArrayList<>();
+		List<Users> pendenciesUsers = new ArrayList<>();
 
 		int studentCounter = 0;
 		int teacherCounter = 0;
 		int bookCounter = 0;
 		
 		do {
+			
 			viewMenu();
 			System.out.print("");
-			option = input.nextInt();
+			try {
+				option = input.nextInt();
+			} catch (InputMismatchException e ) {
+				System.err.println("===================================================");
+				System.err.println("	DIGITE APENAS NÚMEROS");
+				System.err.println("===================================================");
+				input.nextLine();
+			}
 			
 			switch(option) {
 			
@@ -225,19 +234,20 @@ public class Menu {
 					try {
 						System.out.println("___________________________________________________");
 						System.out.println("");
-						System.out.println("	[1] Novo Registro");
+						System.out.println("	[1] Aluno");
+						System.out.println("	[2] Professor");
 						System.out.println("	[0] Menu Inicial");
 						System.out.println("___________________________________________________");
 						System.out.println("");
 						System.out.print("Digite uma opção: ");
 						loanBooks = input.nextInt();	
 						System.out.println("___________________________________________________");
-						
+
 						if(loanBooks == 1) { 
 							
-							int RAL;
 							String bookId;
 							int bookIndex;
+							int RAL;
 							
 							System.out.println("___________________________________________________");
 							System.out.println("");
@@ -250,9 +260,10 @@ public class Menu {
 							RAL = input.nextInt();
 							
 							int studentIndex = Student.searchUser(listStudent, RAL);
-							Student student = listStudent.get(studentIndex);
 							
 							if(studentIndex > -1) {
+								
+								Student student = listStudent.get(studentIndex);
 								
 								if(student.getPendencies().isEmpty()) {
 									
@@ -265,10 +276,17 @@ public class Menu {
 									Book a = listBooks.get(bookIndex);
 									
 									if(bookIndex != -1) {
-										Book.loan(bookIndex, listBooks);
-										pendenciesStudents.add(student);
-										student.setPendencies(a);
 										
+										if(a.getQuantity() < 1) {
+											System.out.println("===================================================");
+											System.out.println("	LIVRO INDISPONÍVEL PARA EMPRESTIMO!");
+											System.out.println("===================================================");
+										}
+										else {
+											Book.loan(bookIndex, listBooks);
+											pendenciesStudents.add(student);
+											student.setPendencies(a);
+										}
 									}
 									else {
 										System.out.println("===================================================");
@@ -288,6 +306,72 @@ public class Menu {
 								System.out.println("	O REGISTRO DO ALUNO NÃO FOI LOCALIZADO!");
 								System.out.println("===================================================");
 							}
+						}
+						else if(loanBooks == 2) {
+							
+							String bookId;
+							int bookIndex;
+							int RFL;
+							
+							System.out.println("___________________________________________________");
+							System.out.println("");
+							System.out.println("	PREENCHA TODOS OS CAMPOS INFORMADOS!");
+							System.out.println("");
+							System.out.println("---------------------------------------------------");
+
+							System.out.println("");
+							System.out.print("Registro do Professor: ");
+							RFL = input.nextInt();
+							
+							int teacherIndex = Teacher.searchUser(listTeacher, RFL);
+							
+							
+							if(teacherIndex > -1) {
+								
+								Teacher teacher = listTeacher.get(teacherIndex);
+								
+								if(teacher.getPendencies().size() < 5) {
+									
+									System.out.print("Id do Livro: ");
+									input.nextLine();
+									bookId = input.nextLine();
+									System.out.println("");
+									
+									bookIndex = Book.searchBook(listBooks, bookId);
+									Book a = listBooks.get(bookIndex);
+									
+									if(bookIndex != -1) {
+										
+										if(a.getQuantity() < 1) {
+											System.out.println("===================================================");
+											System.out.println("	LIVRO INDISPONÍVEL PARA EMPRESTIMO!");
+											System.out.println("===================================================");
+										}
+										else {
+											Book.loan(bookIndex, listBooks);
+											pendenciesTeachers.add(teacher);
+											teacher.setPendencies(a);
+										}
+									}
+									else {
+										System.out.println("===================================================");
+										System.out.println("	LIVRO NÃO LOCALIZADO!");
+										System.out.println("===================================================");
+									}
+								}
+								else {
+									System.out.println("===================================================");
+									System.out.println("	VOCÊ POSSUI PENDÊNCIAS!");
+									System.out.println("===================================================");
+									//listBooks.get(bookIndex).view();
+								}
+							}
+							else if(teacherIndex == -1 || teacherIndex == -2 ) {
+								System.out.println("===================================================");
+								System.out.println("	O REGISTRO DO PROFESSOR NÃO FOI LOCALIZADO!");
+								System.out.println("===================================================");
+							}
+							
 						}
 						else if(loanBooks == 0) {
 							
@@ -357,9 +441,10 @@ public class Menu {
 								RAD = input.nextInt();
 								
 								int studentIndexD = Student.searchUser(listStudent, RAD);
-								Student studentD = listStudent.get(studentIndexD);
+								
 								
 								if(studentIndexD > -1) {
+									Student studentD = listStudent.get(studentIndexD);
 									
 									if(studentD.getPendencies().isEmpty()) {
 										System.out.println("");
@@ -432,15 +517,18 @@ public class Menu {
 					else {
 
 						List<Book> books;
-						int index;
+						
 						
 						System.out.println("___________________________________________________");
 						System.out.println("");
 						System.out.println("	DEVOLUÇÕES PENDENTES: ");
 						System.out.println("");
 						System.out.println("---------------------------------------------------");
-						
+						System.out.println("");
+						System.out.println("ALUNOS: ");
 						for(Student i : pendenciesStudents) {
+							
+							int indexA;
 
 							System.out.println("Qtd. de itens: " + pendenciesStudents.size());
 							System.out.println("");
@@ -449,10 +537,31 @@ public class Menu {
 							books = i.getPendencies();
 							
 							for(Book c : listBooks) {
-								index = books.indexOf(c);
+								indexA = books.indexOf(c);
 								
-								System.out.println("Id do Livro: " + books.get(index).getId());
-								System.out.println("Nome do Livro: " + books.get(index).getName());
+								System.out.println("Id do Livro: " + books.get(indexA).getId());
+								System.out.println("Nome do Livro: " + books.get(indexA).getName());
+								System.out.println("");
+							}
+						}
+						
+						System.out.println("PROFESSORES: ");
+						System.out.println("");
+						for(Teacher i : pendenciesTeachers) {
+							
+							int indexB;
+
+							System.out.println("Qtd. de itens: " + pendenciesTeachers.size());
+							System.out.println("");
+							System.out.println("R.A: " + i.getRf());
+							System.out.println("Nome do Usuário: " + i.getName());
+							books = i.getPendencies();
+							
+							for(Book c : listBooks) {
+								indexB = books.indexOf(c);
+								
+								System.out.println("Id do Livro: " + books.get(indexB).getId());
+								System.out.println("Nome do Livro: " + books.get(indexB).getName());
 								System.out.println("");
 							}
 						}
@@ -522,9 +631,6 @@ public class Menu {
 				System.out.println("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
 				break;
 			default:
-				System.out.println("===================================================");
-				System.out.println("		OPÇÃO INVÁLIDA!");
-				System.out.println("===================================================");
 				System.out.println("");
 				System.out.println("Por favor, digite uma das opções indicadas no menu");
 				System.out.println("");
@@ -542,8 +648,8 @@ public class Menu {
 		System.out.println("");
 		System.out.println("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
 		System.out.println(" ");
-		System.out.println("Bem vindo(a) + data e hora");
-		System.out.println("");
+		//System.out.println("Bem vindo(a) + data e hora");
+		//System.out.println("");
 		System.out.println("	[1] Cadastro de Usuário ");
 		System.out.println("	[2] Cadastro de Livros ");
 		System.out.println("	[3] Emprestimo de Livros ");

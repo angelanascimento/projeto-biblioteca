@@ -1,7 +1,8 @@
 package library;
 
+import java.util.List;
 
-public class Teacher extends Users {
+public class Teacher extends Users implements Register {
 	
 	private int rf;
 	private String teaches;
@@ -50,6 +51,41 @@ public class Teacher extends Users {
 		System.out.printf("Status: %s\n", getStatus());
 		System.out.println("");
 	}
+	
+	public static int searchUser(List<Teacher> listTeacher, int rf) {
+		
+		int response = 0;
+		
+		if(listTeacher.isEmpty()) {
+			response =  -2; //LISTA VAZIA
+		}
+		else {
+			for(int i = 0; i < listTeacher.size(); i++ ) {
+				int bookId = listTeacher.get(i).getRf();
+				if(bookId == rf) {
+					response = i;
+				}
+				else {
+					response = -1; // ID NÃO ENCONTRADO
+				}
+			}
+		}
+		return response;
+	}
+
+	@Override
+	public void updateRegister() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteRegister() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 	
 	
 	

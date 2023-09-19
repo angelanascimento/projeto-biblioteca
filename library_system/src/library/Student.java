@@ -2,7 +2,7 @@ package library;
 
 import java.util.List;
 
-public class Student extends Users {
+public class Student extends Users implements Register {
 	
 	private int ra;
 	private String year; 
@@ -72,8 +72,16 @@ public class Student extends Users {
 		}
 		return response;
 	}
-	
-	/*public static int searchUser(List<Teacher> listTeacher, int rf) {
-		return;
-	}*/
+
+	@Override
+	public void updateRegister() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void deleteRegister() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

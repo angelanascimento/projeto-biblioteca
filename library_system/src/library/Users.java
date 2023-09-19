@@ -70,7 +70,10 @@ public abstract class Users {
 
 	public void setPendencies(Book pendencies) {
 		this.pendencies.add(pendencies);
+		
 	}
 
 	public abstract void view();
+	
+	
 }

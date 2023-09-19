@@ -108,8 +108,6 @@ public class Book {
 		System.out.println("===================================================");
 		//DATA DO EMPRESTIMO
 		book.setQuantity(book.quantity - 1);
-		//INSERIR NA LISTA DE LIVROS EMPRESTADOS
-		//E INSERIR O LIVRO NA LISTA DE PENDÊNCIA DO USUARIO
 	}
 	
 	public static void devolution(int bookIndex, List<Book> listBooks) {
