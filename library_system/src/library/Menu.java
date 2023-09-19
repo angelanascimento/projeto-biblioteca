@@ -518,7 +518,6 @@ public class Menu {
 
 						List<Book> books;
 						
-						
 						System.out.println("___________________________________________________");
 						System.out.println("");
 						System.out.println("	DEVOLUÇÕES PENDENTES: ");
